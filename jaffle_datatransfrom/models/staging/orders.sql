@@ -1,12 +1,15 @@
 {{
     config(
-        materialization='incremental',
+        materialized='incremental',
         incremental_strategy='delete+insert',
         unique_key='source_id',
         indexes=[
             {'columns': ['order_id']}
         ],
-        post_hook='ALTER TABLE {{ this }} ADD CONSTRAINT pk_order_id PRIMARY KEY (order_id);'
+        pre_hook=['ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_order_id'
+        ],
+        post_hook=['ALTER TABLE {{ this }} ADD CONSTRAINT pk_order_id PRIMARY KEY (order_id);'
+        ]
     )
 }}
 
@@ -27,10 +30,13 @@ with src_data as (
     from {{ source('jaffle_shop', 'orders') }}
 ),
 
--- bring in customers (assuming `id` is the primary key in customers)
 customers as (
     select customer_id, source_id
     from {{ ref('customers') }}
+),
+stores as (
+    select store_id, source_id
+    from {{ ref('stores') }}
 ),
 
 intermediate as (
@@ -38,14 +44,17 @@ intermediate as (
         nextval('order_id_seq') as order_id,
         o.id as source_id,
         c.customer_id,
-        o.store_id,
+        s.store_id,
         o.ordered_at,
         o.subtotal,
         o.tax_paid,
         o.order_total
     from src_data o
     left join customers c
-        on o.customer = c.source_id -- assuming `o.customer` holds a customer ID
+        on o.customer = c.source_id 
+    left join stores s
+        on o.store_id = s.source_id
+    
 ),
 
 final as (

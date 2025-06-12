@@ -1,0 +1,1 @@
+alter table staging.customers add column date_name timestamptz 

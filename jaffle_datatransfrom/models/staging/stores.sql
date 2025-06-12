@@ -1,12 +1,18 @@
 {{
-    config( materialized='incremental',
-            incremental_strategy='delete+insert',
-            unique_key='source_id',
-            indexes=[{
-                'columns':['store_id']}
-            ]
-            )
+    config( 
+        materialized='incremental',
+        incremental_strategy='delete+insert',
+        unique_key='source_id',
+        indexes=[{'columns': ['store_id']}],
+         pre_hook=[
+            "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_store_id"
+        ],
+        post_hook=[
+            "ALTER TABLE {{ this }} ADD CONSTRAINT pk_store_id PRIMARY KEY (store_id)"
+        ]
+    )
 }}
+
 {% set sequence_query %}
     CREATE SEQUENCE if not exists store_id_seq start with 1;
 {%endset%}

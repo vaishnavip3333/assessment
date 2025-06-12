@@ -3,17 +3,18 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 
-user = 'root'
+user = 'postgres'
 password = 'root'
 host = 'localhost'
-port = '3306'
+port = '5432'
 database = 'jaffle_shop'
 
 
 csv_folder = '/home/vaishnavi/csv_files'
 
 
-engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}')
+# engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}')
+engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}')
 
 def get_table_name(filename):
     if filename.startswith('raw_'):
@@ -34,7 +35,7 @@ def load_csv_to_mysql(csv_path, table_name, chunk_size=1000):
             if_exists_option = 'replace'
         else:
             if_exists_option = 'append'
-        df_chunk.to_sql(name=table_name, con=engine, if_exists=if_exists_option, index=False)
+        df_chunk.to_sql(name=table_name, con=engine, if_exists=if_exists_option, index=False, schema='jaffle_data')
         print(f"Loaded rows {start} to {end} successfully.")
 
 def main():

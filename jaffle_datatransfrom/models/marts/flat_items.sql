@@ -51,5 +51,5 @@ FROM items i
 JOIN orders o ON i.order_id = o.order_id
 JOIN customers c ON o.customer_id = c.customer_id
 LEFT JOIN stores s ON o.store_id = s.store_id
-LEFT JOIN supplies sup ON i.sku = sup.sku
-LEFT JOIN products p ON i.sku = p.sku
+LEFT JOIN supplies sup ON i.product_id = sup.product_id
+LEFT JOIN products p ON i.product_id = p.product_id

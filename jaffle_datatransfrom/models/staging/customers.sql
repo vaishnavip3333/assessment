@@ -4,7 +4,7 @@
         incremental_strategy='delete+insert',
         unique_key='source_id',
         indexes=[
-            {'columns': ['customer_id']}
+            {'columns': ['customer_id']} 
         ]
     )
 }}

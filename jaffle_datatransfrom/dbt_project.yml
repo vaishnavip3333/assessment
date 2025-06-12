@@ -37,3 +37,7 @@ models:
     staging:
       +materialized: table
       +schema: staging # Prevents the project name from being used as a prefix
+      +post-hook:
+        - "GRANT CONNECT ON DATABASE jaffle_shop TO assignment_readonly;"
+        - "GRANT USAGE ON SCHEMA {{ this.schema }} TO assignment_readonly;" 
+        - "GRANT SELECT ON ALL TABLES IN SCHEMA {{ this.schema }} TO assignment_readonly;"
