@@ -20,11 +20,10 @@ products AS (
 
 SELECT
     i.item_id,
-    i.sku,
 
     -- Product info
-    p.product_name,
-    p.product_type,
+    p.name as product_name,
+    p.type,
     p.price,
     p.description,
 
@@ -33,8 +32,7 @@ SELECT
     o.ordered_at,
 
     -- Customer Info
-    c.customer_id,
-    c.customer_name,
+    c.first_name,
 
     -- Store Info
     s.store_id,
@@ -44,11 +42,10 @@ SELECT
 
     -- Supplies Info
     sup.supply_id,
-    sup.supply_name,
     sup.cost,
     sup.perishable
 FROM items i
-JOIN orders o ON i.order_id = o.order_id
+JOIN orders o ON CAST(i.order_id AS BIGINT) = o.order_id 
 JOIN customers c ON o.customer_id = c.customer_id
 LEFT JOIN stores s ON o.store_id = s.store_id
 LEFT JOIN supplies sup ON i.product_id = sup.product_id

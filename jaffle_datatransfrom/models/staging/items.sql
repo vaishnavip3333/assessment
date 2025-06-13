@@ -12,7 +12,7 @@
     CREATE SEQUENCE IF NOT EXISTS item_id_seq START WITH 1;
 {% endset %}
 {% do run_query(sequence_query) %}
-
+--sequence reset on full refresh
 {% if not is_incremental() %}
     {% set reset_sequence_query %}
         ALTER SEQUENCE item_id_seq RESTART WITH 1;
