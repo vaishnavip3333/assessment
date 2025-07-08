@@ -36,7 +36,7 @@ intermediate AS (
         products.product_id 
     FROM src_data 
     left join products
-        on src_data.sku = products.sku
+        on src_data.sku = products.sku 
 ),
 
 final AS (
