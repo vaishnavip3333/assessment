@@ -4,7 +4,7 @@
         incremental_strategy='delete+insert',
         unique_key='source_id',
         indexes=[
-            {'columns': ['customer_id']} 
+            {'columns': ['customer_id']}  
         ]
     )
 }}
@@ -45,7 +45,7 @@ final AS (
         intermediate.last_name,
         intermediate.full_name
     FROM intermediate
-    {% if is_incremental() %}
+    {% if is_incremental() %}  
     LEFT JOIN {{ this }} AS existing
     ON intermediate.source_id = existing.source_id
         WHERE existing.customer_id IS NULL
@@ -53,4 +53,4 @@ final AS (
     {% endif %}
 )
 
-SELECT * FROM final
+SELECT * FROM final 
