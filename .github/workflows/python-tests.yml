@@ -24,5 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: List current directory for debug
+        run: ls -la
+
+      - name: List tests directory for debug
+        run: ls -la ./tests/
+
       - name: Run tests with pytest
-        run: pytest tests/
+        run: pytest ./tests/
+
